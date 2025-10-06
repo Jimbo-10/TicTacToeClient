@@ -12,7 +12,9 @@ public class NetworkClient : MonoBehaviour
     NetworkPipeline reliableAndInOrderPipeline;
     NetworkPipeline nonReliableNotInOrderedPipeline;
     const ushort NetworkPort = 9001;
-    const string IPAddress = "192.168.2.20";
+    const string IPAddress = "10.0.0.253";
+
+    public UIManager uiManager;
 
     void Start()
     {
@@ -100,9 +102,32 @@ public class NetworkClient : MonoBehaviour
 
     private void ProcessReceivedMsg(string msg)
     {
-        Debug.Log("Msg received = " + msg);
+        string[] split = msg.Split(':');
+        string status = split[0];
+        string response = split.Length > 1 ? split[1] : "";
+
+        if (status == "Success")
+        {
+            uiManager.ShowFeedback("Success: " + response);
+            uiManager.SetState(States.LoggedIn);
+        }
+        else
+        {
+            uiManager.ShowFeedback("Error: " + response);
+        }
     }
 
+    public void Login(string username, string password)
+    {
+        string message = NetworkMessageType.Login.ToString() + ":" + username + ":" + password;
+        SendMessageToServer(message);
+    }
+
+    public void CreateAccount(string username, string password)
+    {
+        string message = $"{NetworkMessageType.CreateAccount}:{username}:{password}";
+        SendMessageToServer(message);
+    }
     public void SendMessageToServer(string msg)
     {
         byte[] msgAsByteArray = Encoding.Unicode.GetBytes(msg);
