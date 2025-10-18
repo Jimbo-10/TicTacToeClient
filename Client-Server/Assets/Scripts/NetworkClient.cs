@@ -105,6 +105,7 @@ public class NetworkClient : MonoBehaviour
         string[] split = msg.Split(':');
         string status = split[0];
         string response = split.Length > 1 ? split[1] : "";
+        string type = split[0];
 
         if (status == "Success")
         {
@@ -114,6 +115,23 @@ public class NetworkClient : MonoBehaviour
         else
         {
             uiManager.ShowFeedback("Error: " + response);
+        }
+
+        switch (type)
+        {
+            case NetworkMessageType.RoomWaiting:
+                Debug.Log("Waiting for opponent...");
+                uiManager.ShowWaitingScreen();
+                break;
+
+            case NetworkMessageType.RoomStart:
+                Debug.Log("Game starting!");
+                uiManager.ShowPlayScreen();
+                break;
+
+            case NetworkMessageType.PlayerAction:
+                Debug.Log("Opponent says: " + split[1]);
+                break;
         }
     }
 
@@ -142,5 +160,19 @@ public class NetworkClient : MonoBehaviour
         buffer.Dispose();
     }
 
+    public void SendCreateOrJoinRoom(string roomName)
+    {
+        SendMessageToServer($"{NetworkMessageType.CreateOrJoinRoom}:{roomName}");
+    }
+
+    public void SendLeaveRoom()
+    {
+        SendMessageToServer($"{NetworkMessageType.LeaveRoom}");
+    }
+
+    public void SendPlayerAction(string action)
+    {
+        SendMessageToServer($"{NetworkMessageType.PlayerAction}:{action}");
+    }
 }
 

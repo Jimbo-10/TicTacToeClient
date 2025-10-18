@@ -16,8 +16,18 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     GameObject loggedIn;
 
+    [SerializeField]
+    GameObject lobbyRoom;
+
+    [SerializeField]
+    GameObject waitingRoom;
+
+    [SerializeField]
+    GameObject playRoom;
+
     public TMPro.TMP_InputField usernameInput;
     public TMPro.TMP_InputField passwordInput;
+    public TMPro.TMP_InputField roomInput;
 
     public TMPro.TMP_Text feedbackText;
 
@@ -66,6 +76,9 @@ public class UIManager : MonoBehaviour
         login.SetActive(false);
         createAccount.SetActive(true);
         mainMenu.SetActive(false);
+        lobbyRoom.SetActive(false);
+        waitingRoom.SetActive(false);
+        playRoom.SetActive(false);
         ClearFeedback();
     }
 
@@ -86,5 +99,35 @@ public class UIManager : MonoBehaviour
             feedbackText.text = "";
             feedbackText.gameObject.SetActive(false);
         }
+    }
+
+    public void ShowLobby()
+    {
+        login.SetActive(false);
+        createAccount.SetActive(false);
+        mainMenu.SetActive(false);
+        lobbyRoom.SetActive(true);
+        waitingRoom.SetActive(false);
+        playRoom.SetActive(false);
+    }
+
+    public void ShowWaitingScreen()
+    {
+        login.SetActive(false);
+        createAccount.SetActive(false);
+        mainMenu.SetActive(false);
+        lobbyRoom.SetActive(false);
+        waitingRoom.SetActive(true);
+        playRoom.SetActive(false);
+    }
+
+    public void ShowPlayScreen()
+    {
+        login.SetActive(false);
+        createAccount.SetActive(false);
+        mainMenu.SetActive(false);
+        lobbyRoom.SetActive(false);
+        waitingRoom.SetActive(false);
+        playRoom.SetActive(true);
     }
 }
